@@ -28,7 +28,7 @@ Keine zusätzlichen Parameter erforderlich. Die Tenant-ID wird automatisch aus d
 
 ```bash
 curl -X GET "https://ihre-api-domain.de/entity-management/entities" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL"
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
 ```
 
 #### Erfolgreiche Antwort (200 OK)
@@ -69,7 +69,7 @@ POST /entity-management/entities
 
 ```bash
 curl -X POST "https://ihre-api-domain.de/entity-management/entities" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL" \
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Neue Entität",
@@ -106,7 +106,7 @@ GET /entity-management/entities/{entity_id}
 
 ```bash
 curl -X GET "https://ihre-api-domain.de/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL"
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
 ```
 
 #### Erfolgreiche Antwort (200 OK)
@@ -145,7 +145,7 @@ PUT /entity-management/entities/{entity_id}
 
 ```bash
 curl -X PUT "https://ihre-api-domain.de/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL" \
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "Aktualisierter Entitätsname",
@@ -183,7 +183,7 @@ DELETE /entity-management/entities/{entity_id}
 
 ```bash
 curl -X DELETE "https://ihre-api-domain.de/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL"
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
 ```
 
 #### Erfolgreiche Antwort (200 OK)
@@ -204,7 +204,7 @@ Bevor Sie Dokumente über die Dokument-Upload-API hochladen können, müssen Sie
 1. **Entität erstellen**:
    ```bash
    curl -X POST "https://ihre-api-domain.de/entity-management/entities" \
-     -H "Authorization: Bearer IHR_API_SCHLÜSSEL" \
+     -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
      -H "Content-Type: application/json" \
      -d '{
        "name": "Projektzusammenarbeit XYZ",
@@ -215,7 +215,7 @@ Bevor Sie Dokumente über die Dokument-Upload-API hochladen können, müssen Sie
 2. **Die erhaltene Entitäts-ID für den Dokument-Upload verwenden**:
    ```bash
    curl -X POST "https://ihre-api-domain.de/document-management/documents" \
-     -H "Authorization: Bearer IHR_API_SCHLÜSSEL" \
+     -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
      -F "file=@/pfad/zu/dokument.pdf" \
      -F "entity_id=123e4567-e89b-12d3-a456-426614174000" \
      -F "classify=true"
