@@ -61,7 +61,7 @@ curl -X POST "https://ihre-api-domain.de/document-management/documents" \
 }
 ```
 
-Die `correlation_id` kann verwendet werden, um den Status der Dokumentenverarbeitung über andere API-Endpunkte abzufragen.
+Da Dokumente von NEO "entpackt" werden, bspw. Anhänge aus E-Mails, dient die `correlation_id` dazu eine Klammer um diese Dokumente zu bilden. Sie kann verwendet werden, um den Status des hochgeladenen und der daraus entpackten Dokumente über den ```/document-management/documents/batch``` Endpoint abzufragen. 
 
 ### Fehlerantworten
 
