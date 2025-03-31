@@ -3,7 +3,7 @@
 
 ## Übersicht
 
-Diese API ermöglicht das Hochladen und Verarbeiten von Dokumenten in unserem Dokumentenmanagementsystem. Nach dem Upload werden die Dokumente automatisch verarbeitet, was die Textextraktion und optional eine Klassifizierung umfasst.
+Diese API ermöglicht das Hochladen und Verarbeiten von Dokumenten in unserem Dokumentenmanagementsystem. Nach dem Upload werden die Dokumente automatisch verarbeitet, was die Textextraktion und optional eine Klassifizierung umfasst. Vor dem Upload muss zunächst eine Entität/ein Space erstellt werden, siehe ["Neue Entität erstellen"](https://github.com/docunite/neo-api-documentation/blob/main/entities.md).
 
 ## Endpunkt
 
