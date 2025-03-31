@@ -108,6 +108,23 @@ curl -X GET "https://ihre-api-domain.de/document-type-management/document-types/
 
 - **500 Internal Server Error**: Interner Serverfehler bei der Verarbeitung
 
+# Dokumenttyp-Hierarchie: Entwicklerleitfaden
+
+## Überblick
+
+In NEO können Dokumenttypen hierarchisch organisiert werden, wobei ein Dokumenttyp ein Synonym (oder Untertyp) eines anderen sein kann. Diese Beziehung wird über das Attribut `synonym_of` abgebildet. Dieser Leitfaden erklärt, wie Entwickler den vollständigen hierarchischen Pfad eines Dokumenttyps ermitteln können.
+
+## Das Attribut `synonym_of`
+
+Das Feld `synonym_of` in einem Dokumenttyp enthält die ID des übergeordneten Dokumenttyps. Wenn `synonym_of` null oder leer ist, handelt es sich um einen Dokumenttyp der obersten Ebene. Diese Struktur ermöglicht eine Baumdarstellung von Dokumenttypen.
+
+Beispiel für eine Hierarchie:
+- Vertrag (oberste Ebene, `synonym_of` = null)
+  - Arbeitsvertrag (`synonym_of` = ID von "Vertrag")
+    - Befristeter Arbeitsvertrag (`synonym_of` = ID von "Arbeitsvertrag")
+  - Kaufvertrag (`synonym_of` = ID von "Vertrag")
+  - Mietvertrag (`synonym_of` = ID von "Vertrag")
+
 ## Verwendung von Dokumententypen
 
 Dokumententypen werden in verschiedenen Szenarien verwendet:
@@ -121,7 +138,6 @@ Dokumententypen werden in verschiedenen Szenarien verwendet:
 4. **Berichterstellung**: Statistiken und Berichte können nach Dokumententypen gruppiert werden.
 
 ## Hinweise
-- Über das synonym_of Attribut kann sich eine parent-child Beziehung ergeben bspw. der Dokumenttyp "Gewerbemietvertrag" hat im Attribut synonym_of den Wert der ID des Dokumenttypen "Mietvertrag"
 - Die Dokumententypen sind mandantenspezifisch (tenant-specific)
 - Die Abfrageergebnisse enthalten nur Dokumententypen, auf die der aktuelle Mandant Zugriff hat
 - Die IDs der Dokumententypen werden bei der Dokumentenklassifizierung und -aktualisierung verwendet
