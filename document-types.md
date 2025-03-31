@@ -108,9 +108,7 @@ curl -X GET "https://ihre-api-domain.de/document-type-management/document-types/
 
 - **500 Internal Server Error**: Interner Serverfehler bei der Verarbeitung
 
-# Dokumenttyp-Hierarchie: Entwicklerleitfaden
-
-## Überblick
+# Dokumenttyp-Hierarchie
 
 In NEO können Dokumenttypen hierarchisch organisiert werden, wobei ein Dokumenttyp ein Synonym (oder Untertyp) eines anderen sein kann. Diese Beziehung wird über das Attribut `synonym_of` abgebildet. Dieser Leitfaden erklärt, wie Entwickler den vollständigen hierarchischen Pfad eines Dokumenttyps ermitteln können.
 
