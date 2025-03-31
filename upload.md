@@ -32,7 +32,7 @@ Der Endpunkt erwartet eine `multipart/form-data`-Anfrage mit folgenden Parameter
 
 ```bash
 curl -X POST "https://ihre-api-domain.de/document-management/documents" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL" \
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
   -F "file=@/pfad/zu/ihrer/datei.pdf" \
   -F "entity_id=KUNDE123" \
   -F "classify=true"
@@ -42,7 +42,7 @@ curl -X POST "https://ihre-api-domain.de/document-management/documents" \
 
 ```bash
 curl -X POST "https://ihre-api-domain.de/document-management/documents" \
-  -H "Authorization: Bearer IHR_API_SCHLÜSSEL" \
+  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
   -F "file=@/pfad/zu/ihrer/datei1.pdf" \
   -F "file=@/pfad/zu/ihrer/datei2.pdf" \
   -F "entity_id=PROJEKT456" \
