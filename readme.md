@@ -1,4 +1,4 @@
-# NEO-API Dokumentation (in progress)
+# NEO-API Dokumentation (wip)
 
 ## Übersicht
 
