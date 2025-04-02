@@ -50,6 +50,124 @@ curl -X POST "https://ihre-api-domain.de/document-management/documents" \
   -F "original_path=/originaler/dateipfad/"
 ```
 
+### Python Beispiel
+
+```python
+import requests
+import os
+import json
+from pathlib import Path
+
+def upload_documents(api_url, api_key, files_path, entity_id, classify=True, original_path=None):
+    """
+    Lädt ein oder mehrere Dokumente über die API hoch.
+    
+    Args:
+        api_url (str): Basis-URL der API (z.B. "https://api.example.com/api")
+        api_key (str): API-Schlüssel für die Authentifizierung
+        files_path (str or list): Pfad zu einer Datei oder Liste von Dateipfaden
+        entity_id (str): ID der Entität, mit der die Dokumente verknüpft werden sollen
+        classify (bool): Ob die Dokumente klassifiziert werden sollen
+        original_path (str, optional): Originalpfad der Dokumente
+        
+    Returns:
+        dict: Die API-Antwort als Dictionary
+    """
+    # Endpoint-URL
+    url = f"{api_url}/document-management/documents"
+    
+    # Headers mit API-Key für die Authentifizierung
+    headers = {
+        "X-API-KEY": api_key,
+    }
+    
+    # Formular-Daten
+    form_data = {
+        "entity_id": entity_id,
+        "classify": str(classify).lower(),
+    }
+    
+    if original_path:
+        form_data["original_path"] = original_path
+    
+    # Dateien für den Upload vorbereiten
+    if isinstance(files_path, str):
+        files_path = [files_path]  # Einzelnen Pfad in Liste umwandeln
+    
+    files = []
+    for file_path in files_path:
+        file_name = Path(file_path).name
+        files.append(
+            ('file', (file_name, open(file_path, 'rb'), 'application/pdf'))
+        )
+    
+    # POST-Anfrage senden
+    response = requests.post(
+        url=url,
+        headers=headers,
+        data=form_data,
+        files=files
+    )
+    
+    # Dateien schließen
+    for _, (_, file_obj, _) in files:
+        file_obj.close()
+    
+    # Antwort verarbeiten
+    try:
+        result = response.json()
+        print(f"Status: {response.status_code}")
+        print(json.dumps(result, indent=2))
+        return result
+    except json.JSONDecodeError:
+        print(f"Status: {response.status_code}")
+        print(f"Response: {response.text}")
+        return {"error": "Invalid JSON response"}
+
+if __name__ == "__main__":
+    # Konfiguration
+    API_URL = "https://your-api-domain.com/api"  # Passen Sie dies an Ihre API-URL an
+    API_KEY = "your-api-key"                     # Ersetzen Sie dies durch Ihren API-Schlüssel
+    
+    # Beispiel für einen einzelnen Datei-Upload
+    document_path = "./example_document.pdf"     # Pfad zu Ihrem Beispieldokument
+    entity_id = "<unique id>"                   # Beispiel-Entitäts-ID
+    
+    print("Beispiel 1: Einzelnes Dokument hochladen")
+    upload_documents(
+        api_url=API_URL,
+        api_key=API_KEY,
+        files_path=document_path,
+        entity_id=entity_id
+    )
+    
+    # Beispiel für mehrere Dateien
+    print("\nBeispiel 2: Mehrere Dokumente hochladen")
+    multiple_docs = [
+        "./document1.pdf",
+        "./document2.pdf",
+        "./invoice.pdf"
+    ]
+    
+    upload_documents(
+        api_url=API_URL,
+        api_key=API_KEY,
+        files_path=multiple_docs,
+        entity_id="<unique id>",
+        classify=True,
+        original_path="/customer/project-456/documents"
+    )
+    
+    print("\nBeispiel 3: Dokument ohne Klassifizierung hochladen")
+    upload_documents(
+        api_url=API_URL,
+        api_key=API_KEY,
+        files_path="./contract.pdf",
+        entity_id="<unique id>",
+        classify=False
+    )
+```
+
 ## Antwort
 
 ### Erfolgreiche Antwort (200 OK)
