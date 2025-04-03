@@ -168,6 +168,96 @@ if __name__ == "__main__":
     )
 ```
 
+### Javascript Beispiel
+
+```javascript
+async function uploadDocuments(apiUrl, apiKey, filesPath, entityId, classify = true, originalPath = null) {
+  const url = `${apiUrl}/document-management/documents`;
+
+  const headers = {
+    "X-API-KEY": apiKey,
+  };
+
+  const formData = new FormData();
+  formData.append("entity_id", entityId);
+  formData.append("classify", classify.toString());
+
+  if (originalPath) {
+    formData.append("original_path", originalPath);
+  }
+
+  // Ensure filesPath is an array
+  if (typeof filesPath === "string") {
+    filesPath = [filesPath];
+  }
+
+  for (const filePath of filesPath) {
+    const fileName = filePath.split("/").pop(); // Get file name from path
+
+    // Read file as Blob (Node.js environment required for fs)
+    const fileBlob = await readFileAsBlob(filePath);
+    formData.append("file", fileBlob, fileName);
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: formData
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const result = await response.json();
+      console.log("Status:", response.status);
+      console.log(JSON.stringify(result, null, 2));
+      return result;
+    } else {
+      const text = await response.text();
+      console.log("Status:", response.status);
+      console.log("Response:", text);
+      return { error: "Invalid JSON response" };
+    }
+  } catch (error) {
+    console.error("Fehler beim Hochladen:", error);
+    return { error: error.message };
+  }
+}
+
+// Hilfsfunktion zum Lesen von Dateien als Blob (nur in Node.js)
+const fs = require("fs");
+const path = require("path");
+
+function readFileAsBlob(filePath) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, data) => {
+      if (err) return reject(err);
+      const blob = new Blob([data], { type: "application/pdf" });
+      resolve(blob);
+    });
+  });
+}
+
+// Beispiel-Aufrufe
+const API_URL = "https://your-api-domain.com/api";
+const API_KEY = "your-api-key";
+const ENTITY_ID = "<unique id>";
+
+// Beispiel 1: Einzelnes Dokument
+uploadDocuments(API_URL, API_KEY, "./example_document.pdf", ENTITY_ID);
+
+// Beispiel 2: Mehrere Dokumente
+uploadDocuments(API_URL, API_KEY, [
+  "./document1.pdf",
+  "./document2.pdf",
+  "./invoice.pdf"
+], "<unique id>", true, "/customer/project-456/documents");
+
+// Beispiel 3: Ohne Klassifizierung
+uploadDocuments(API_URL, API_KEY, "./contract.pdf", "<unique id>", false);
+
+```
+
 ## Antwort
 
 ### Erfolgreiche Antwort (200 OK)
