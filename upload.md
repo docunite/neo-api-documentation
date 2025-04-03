@@ -239,7 +239,7 @@ function readFileAsBlob(filePath) {
 }
 
 // Beispiel-Aufrufe
-const API_URL = "https://your-api-domain.com/api";
+const API_URL = "https://your-api-domain.com/";
 const API_KEY = "your-api-key";
 const ENTITY_ID = "<unique id>";
 
