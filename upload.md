@@ -126,7 +126,7 @@ def upload_documents(api_url, api_key, files_path, entity_id, classify=True, ori
 
 if __name__ == "__main__":
     # Konfiguration
-    API_URL = "https://your-api-domain.com/api"  # Passen Sie dies an Ihre API-URL an
+    API_URL = "https://your-api-domain.com"  # Passen Sie dies an Ihre API-URL an
     API_KEY = "your-api-key"                     # Ersetzen Sie dies durch Ihren API-Schlüssel
     
     # Beispiel für einen einzelnen Datei-Upload
@@ -239,7 +239,7 @@ function readFileAsBlob(filePath) {
 }
 
 // Beispiel-Aufrufe
-const API_URL = "https://your-api-domain.com/";
+const API_URL = "https://your-api-domain.com";
 const API_KEY = "your-api-key";
 const ENTITY_ID = "<unique id>";
 
