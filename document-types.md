@@ -137,5 +137,5 @@ Dokumententypen werden in verschiedenen Szenarien verwendet:
 
 ## Hinweise
 - Die Dokumententypen sind mandantenspezifisch (tenant-specific)
-- Die Abfrageergebnisse enthalten nur Dokumententypen, auf die der aktuelle Mandant Zugriff hat
+- Die Abfrageergebnisse enthalten nur Dokumententypen, auf die der aktuelle Mandant Zugriff hat. Standardisierte Dokumenttypen werden out-of-the-box mitgeliefert. Die individuellen Dokumenttypen lassen sich über das Attribut "origin": "individual" ermitteln.
 - Die IDs der Dokumententypen werden bei der Dokumentenklassifizierung und -aktualisierung verwendet
