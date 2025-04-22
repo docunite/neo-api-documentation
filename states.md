@@ -1,3 +1,5 @@
+# Dokument-Status
+
 Ein Dokument hat während der Verarbeitungsschritte verschiedene Status. Diese sind als Enum implementiert und stellen sich wie folgt dar:
 
     UNSUPPORTED = -2
