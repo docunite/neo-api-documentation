@@ -24,6 +24,7 @@ Der Endpunkt erwartet eine `multipart/form-data`-Anfrage mit folgenden Parameter
 | file | Datei(en) | Ja | Eine oder mehrere Dateien, die hochgeladen werden sollen. Unterstützte Formate sind PDF, DOCX, JPG, PNG, etc. |
 | entity_id | String | Ja | Die ID der Entität, mit der das Dokument verknüpft werden soll (z.B. Kunden-ID, Projekt-ID) |
 | classify | Boolean | Nein | Gibt an, ob die Dokumente automatisch klassifiziert werden sollen. Standardwert ist `true` |
+| prompt_id | Boolean | Nein | Die ID des Prompts der für die Klassifizierung verwendet werden soll (zu finden im Settings Menü unter Prompts). Wichtig zu beachten ist, dass es sich um einen Prompt vom Typ "Klassifizierung" handeln muss. Wird keine Prompt-ID angegeben, wird der von NEO vorgegebene Prompt verwendet.|
 | original_path | String | Nein | Optionaler Pfad, der mit dem Dokument gespeichert werden soll (z.B. der ursprüngliche Dateipfad) |
 
 ## Beispiel
