@@ -11,6 +11,7 @@ Mit dieser API können Sie:
 - Dokumenttypen abfragen und nutzen
 - Textextraktion, Klassifizierung und Anreicherung von Dokumenten durchführen
 - Dokumenteninhalte abfragen und analysieren
+- Eigene Prompts und Schemas für die Klassifizierung und Anreicherung erstellen und verwalten
 
 ## Inhaltsverzeichnis
 
@@ -67,6 +68,14 @@ Endpunkte zum Hochladen, Verarbeiten und Abfragen von Dokumenten.
 ### [Dokumenttypen](document-types.md)
 
 Endpunkte zur Abfrage von Dokumenttypen.
+
+### [Schemas](schemas.md)
+
+Endpunkte zur Verwaltungs von Schemas.
+
+### [Prompts](prompts.md)
+
+Endpunkte zur Verwaltung von Prompts.
 
 ## Fehlerbehandlung
 
