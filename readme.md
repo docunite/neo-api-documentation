@@ -1,160 +1,161 @@
-# NEO-API Dokumentation (wip)
+# NEO-API Documentation (wip)
 
-## Übersicht
+## Overview
 
-Willkommen zur Dokumentation der NEO-API. Diese API ermöglicht die programmatische Verwaltung von Dokumenten, Entitäten (Spaces) und Dokumenttypen.
+Welcome to the documentation for the NEO-API. This API enables programmatic management of documents, entities (Spaces), and document types.
 
-Mit dieser API können Sie:
+With this API you can:
 
-- Dokumente hochladen und verarbeiten
-- Entitäten (Spaces) als Container für Dokumente erstellen und verwalten
-- Dokumenttypen abfragen und nutzen
-- Textextraktion, Klassifizierung und Anreicherung von Dokumenten durchführen
-- Dokumenteninhalte abfragen und analysieren
-- Eigene Prompts und Schemas für die Klassifizierung und Anreicherung erstellen und verwalten
+- Upload and process documents
+- Create and manage entities (Spaces) as containers for documents
+- Query and utilize document types
+- Perform text extraction, classification, and enrichment of documents
+- Query and analyze document content
+- Create and manage your own prompts and schemas for classification and enrichment
 
-## Inhaltsverzeichnis
+## Table of Contents
 
-- [Erste Schritte](#erste-schritte)
-- [Authentifizierung](#authentifizierung)
-- [API-Endpunkte](#api-endpunkte)
-- [Fehlerbehandlung](#fehlerbehandlung)
-- [Ratenbegrenzung](#ratenbegrenzung)
+- [Getting Started](#getting-started)
+- [Authentication](#authentication)
+- [API Endpoints](#api-endpoints)
+- [Error Handling](#error-handling)
+- [Rate Limiting](#rate-limiting)
 - [Webhooks](#webhooks)
 - [Best Practices](#best-practices)
 
-## Erste Schritte
+## Getting Started
 
-Um die API nutzen zu können, benötigen Sie:
+To use the API, you need:
 
-1. Ein registriertes Konto für NEO
-2. Einen gültigen API-Schlüssel, der im Administrationsbereich generiert werden kann
-3. Grundkenntnisse über RESTful APIs und HTTP-Anfragen
+1. A registered NEO account
+2. A valid API key, which can be generated in the administration area
+3. Basic knowledge of RESTful APIs and HTTP requests
 
-### Typischer Workflow
+### Typical Workflow
 
-Ein typischer Workflow zur Nutzung der API umfasst folgende Schritte:
+A typical workflow for using the API involves the following steps:
 
-1. **Entität erstellen**: Erstellen Sie zunächst eine Entität (Space), die als Container für Ihre Dokumente dient.
-2. **Dokumente hochladen**: Laden Sie Dokumente hoch und ordnen Sie sie der erstellten Entität zu.
-3. **Verarbeitungsstatus überwachen**: Überwachen Sie den Verarbeitungsstatus der hochgeladenen Dokumente.
-4. **Dokumenteninhalte abfragen**: Fragen Sie Metadaten, extrahierten Text oder klassifizierte Informationen ab.
+1. **Create an Entity**: First, create an entity (Space) to serve as a container for your documents.
+2. **Upload Documents**: Upload documents and assign them to the created entity.
+3. **Monitor Processing Status**: Monitor the processing status of uploaded documents.
+4. **Query Document Content**: Query metadata, extracted text, or classified information.
 
-## Authentifizierung
+## Authentication
 
-Alle API-Anfragen erfordern eine Authentifizierung mittels eines API-Schlüssels, der im HTTP-Header jeder Anfrage mitgesendet werden muss.
+All API requests require authentication using an API key, which must be sent in the HTTP header of each request.
 
 ```
-X-API-KEY:  <IHR_API_SCHLÜSSEL>
+X-API-KEY:  <YOUR_API_KEY>
 ```
 
-API-Schlüssel können im Administrationsbereich des Dokumentenmanagementsystems generiert und verwaltet werden. Jeder Schlüssel ist einem bestimmten Mandanten (Tenant) zugeordnet und bestimmt die verfügbaren Berechtigungen.
+API keys can be generated and managed in the administration area of the document management system. Each key is assigned to a specific tenant and determines the permissions for API access.
 
-> **Sicherheitshinweis**: Behandeln Sie Ihren API-Schlüssel wie ein Passwort. Teilen Sie ihn nicht mit Dritten und speichern Sie ihn nicht im Klartext in Ihrem Quellcode.
+> **Security Note**: Treat your API key like a password. Do not share it with third parties and do not store it in plain text in your source code.
 
-## API-Endpunkte
+## API Endpoints
 
-Die API ist in mehrere logische Bereiche unterteilt:
+The API is divided into several logical areas:
 
-### [Entitäten-Management](entities.md)
+### [Entity Management](entities.md)
 
-Endpunkte zur Verwaltung von Entitäten (Spaces), die als Container für Dokumente dienen.
+Endpoints for managing entities (Spaces), which serve as containers for documents.
 
-### [Dokumenten-Management](upload.md)
+### [Document Management](upload.md)
 
-Endpunkte zum Hochladen, Verarbeiten und Abfragen von Dokumenten.
+Endpoints for uploading, processing, and querying documents.
 
+### [Document Types](document-types.md)
 
-### [Dokumenttypen](document-types.md)
-
-Endpunkte zur Abfrage von Dokumenttypen.
+Endpoints for querying document types.
 
 ### [Schemas](schemas.md)
 
-Endpunkte zur Verwaltungs von Schemas.
+Endpoints for managing schemas.
 
 ### [Prompts](prompts.md)
 
-Endpunkte zur Verwaltung von Prompts.
+Endpoints for managing prompts.
 
-## Fehlerbehandlung
+## Error Handling
 
-Die API verwendet standardmäßige HTTP-Statuscodes, um den Erfolg oder Misserfolg einer Anfrage anzuzeigen:
+The API uses standard HTTP status codes to indicate the success or failure of a request:
 
-- **2xx** - Erfolgreiche Anfragen (z.B. 200 OK, 201 Created)
-- **4xx** - Clientseitige Fehler (z.B. 400 Bad Request, 401 Unauthorized, 404 Not Found)
-- **5xx** - Serverseitige Fehler (z.B. 500 Internal Server Error)
+- **2xx** - Successful requests (e.g., 200 OK, 201 Created)
+- **4xx** - Client errors (e.g., 400 Bad Request, 401 Unauthorized, 404 Not Found)
+- **5xx** - Server errors (e.g., 500 Internal Server Error)
 
-Fehlermeldungen werden im JSON-Format zurückgegeben:
+Error messages are returned in JSON format:
 
 ```json
 {
-  "error": "Beschreibung des Fehlers",
-  "details": "Zusätzliche Informationen (optional)"
+  "error": "Description of the error",
+  "details": "Additional information (optional)"
 }
 ```
 
-### Häufige Fehler
+### Common Errors
 
-| Status | Beschreibung | Mögliche Ursache |
-|--------|--------------|------------------|
-| 400    | Bad Request  | Fehlende oder ungültige Parameter |
-| 401    | Unauthorized | Ungültiger oder fehlender API-Schlüssel |
-| 403    | Forbidden    | Unzureichende Berechtigungen |
-| 404    | Not Found    | Ressource nicht gefunden |
-| 413    | Payload Too Large | Datei zu groß |
-| 429    | Too Many Requests | Ratenbegrenzung überschritten |
-| 500    | Internal Server Error | Serverfehler |
+| Status | Description            | Possible Cause                       |
+|--------|------------------------|--------------------------------------|
+| 400    | Bad Request            | Missing or invalid parameters        |
+| 401    | Unauthorized           | Invalid or missing API key           |
+| 403    | Forbidden              | Insufficient permissions             |
+| 404    | Not Found              | Resource not found                   |
+| 413    | Payload Too Large      | File too large                       |
+| 429    | Too Many Requests      | Rate limit exceeded                  |
+| 500    | Internal Server Error  | Server error                         |
 
-## Ratenbegrenzung
+## Rate Limiting
 
-Die API unterliegt Ratenbegrenzungen, um eine gleichmäßige Servicequalität für alle Benutzer zu gewährleisten. Die genauen Limits variieren je nach Lizenztyp und werden in den HTTP-Headern jeder Antwort angegeben:
+The API is subject to rate limits to ensure consistent service quality for all users. The exact limits vary depending on the license type and are included in the HTTP headers of each response:
 
-- `X-RateLimit-Limit`: Maximale Anzahl der Anfragen pro Zeitraum
-- `X-RateLimit-Remaining`: Verbleibende Anfragen im aktuellen Zeitraum
-- `X-RateLimit-Reset`: Zeitpunkt, zu dem das Limit zurückgesetzt wird (Unix-Timestamp)
+- `X-RateLimit-Limit`: Maximum number of requests per period
+- `X-RateLimit-Remaining`: Remaining requests in the current period
+- `X-RateLimit-Reset`: Time when the limit resets (Unix timestamp)
 
-Bei Überschreitung der Limits wird ein 429 Too Many Requests Status zurückgegeben.
+If the limits are exceeded, a 429 Too Many Requests status is returned.
 
 ## Webhooks
 
-Für asynchrone Prozesse wie die Dokumentenverarbeitung bietet das System Webhook-Benachrichtigungen:
+For asynchronous processes such as document processing, the system offers webhook notifications:
 
-1. Registrieren Sie einen Webhook-Endpunkt über die API
-2. Wählen Sie die Ereignisse aus, für die Sie benachrichtigt werden möchten
-3. Erhalten Sie Echtzeit-Updates, wenn die ausgewählten Ereignisse eintreten
+1. Register a webhook endpoint via the API
+2. Select the events you want to be notified about
+3. Receive real-time updates when the selected events occur
 
-Typische Ereignisse für Webhooks:
-- Textextraktion abgeschlossen
-- Klassifizierung abgeschlossen
-- Anreicherung abgeschlossen
+Typical events for webhooks:
+- Text extraction completed
+- Classification completed
+- Enrichment completed
 
 ## Best Practices
 
-### Allgemeine Empfehlungen
+### General Recommendations
 
-1. **Fehlerbehandlung implementieren**: Fangen Sie Fehlercodes ab und reagieren Sie entsprechend.
-2. **Pagination nutzen**: Verwenden Sie bei großen Datenmengen Pagination-Parameter.
-3. **Datenvolumen minimieren**: Fordern Sie nur die Daten an, die Sie tatsächlich benötigen.
-4. **Caching implementieren**: Speichern Sie häufig abgefragte, statische Daten lokal zwischen.
-5. **Backoff-Strategien**: Implementieren Sie exponentielles Backoff bei Wiederholungsversuchen.
+1. **Implement Error Handling**: Capture error codes and respond appropriately.
+2. **Use Pagination**: Use pagination parameters for large data sets.
+3. **Minimize Data Volume**: Only request the data you actually need.
+4. **Implement Caching**: Cache frequently requested, static data locally.
+5. **Backoff Strategies**: Implement exponential backoff for retry attempts.
 
-### Dokumenten-Upload
+### Document Upload
 
-1. **Batching**: Teilen Sie große Mengen von Dokumenten in kleinere Batches auf.
-2. **Dateitypen prüfen**: Stellen Sie sicher, dass die hochgeladenen Dateien den unterstützten Formaten entsprechen.
-3. **Korrelations-IDs**: Speichern Sie die zurückgegebenen Korrelations-IDs, um Verarbeitungsergebnisse zu verfolgen.
+1. **Batching**: Split large numbers of documents into smaller batches.
+2. **Check File Types**: Ensure that uploaded files conform to supported formats.
+3. **Correlation IDs**: Store the returned correlation IDs to track processing results.
 
-### Sicherheit
+### Security
 
-1. **HTTPS verwenden**: Senden Sie Anfragen nur über HTTPS, niemals über unverschlüsselte HTTP-Verbindungen.
-2. **API-Schlüssel sicher speichern**: Speichern Sie API-Schlüssel in Umgebungsvariablen oder sicheren Schlüsselspeichern.
-3. **Minimale Berechtigungen**: Verwenden Sie API-Schlüssel mit den geringstmöglichen Berechtigungen.
+1. **Use HTTPS**: Only send requests via HTTPS, never via unencrypted HTTP connections.
+2. **Store API Keys Securely**: Store API keys in environment variables or secure key stores.
+3. **Minimal Permissions**: Use API keys with the least privileges necessary.
 
-## Support und Kontakt
+## Support and Contact
 
-Bei Fragen oder Problemen mit der API kontaktieren Sie bitte unseren Support.
+If you have questions or issues with the API, please contact our support team.
 
 ---
 
-© 2025 docunite GmbH. Alle Rechte vorbehalten.
+© 2025 docunite GmbH. All rights reserved.
+
+```
