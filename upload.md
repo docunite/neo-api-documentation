@@ -1,57 +1,56 @@
+# Document Upload API Documentation
 
-# Dokumenten-Upload API Dokumentation
+## Overview
 
-## Übersicht
+This API enables uploading and processing of documents in our document management system. After upload, documents are automatically processed, including text extraction and optional classification.
 
-Diese API ermöglicht das Hochladen und Verarbeiten von Dokumenten in unserem Dokumentenmanagementsystem. Nach dem Upload werden die Dokumente automatisch verarbeitet, was die Textextraktion und optional eine Klassifizierung umfasst. Vor dem Upload muss zunächst eine Entität/ein Space erstellt werden, siehe ["Neue Entität erstellen"](https://github.com/docunite/neo-api-documentation/blob/main/entities.md).
-
-## Endpunkt
+## Endpoint
 
 ```
 POST /document-management/documents
 ```
 
-## Authentifizierung
+## Authentication
 
-Für alle Anfragen ist ein gültiger API-Schlüssel erforderlich, der im Header übermittelt werden muss.
+All requests require a valid API key, which must be provided in the header.
 
-## Anfrage
+## Request
 
-Der Endpunkt erwartet eine `multipart/form-data`-Anfrage mit folgenden Parametern:
+The endpoint expects a `multipart/form-data` request with the following parameters:
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| file | Datei(en) | Ja | Eine oder mehrere Dateien, die hochgeladen werden sollen. Unterstützte Formate sind PDF, DOCX, JPG, PNG, etc. |
-| entity_id | String | Ja | Die ID der Entität, mit der das Dokument verknüpft werden soll (z.B. Kunden-ID, Projekt-ID) |
-| classify | Boolean | Nein | Gibt an, ob die Dokumente automatisch klassifiziert werden sollen. Standardwert ist `true` |
-| prompt_id | Boolean | Nein | Die ID des Prompts der für die Klassifizierung verwendet werden soll (zu finden im Settings Menü unter Prompts). Wichtig zu beachten ist, dass es sich um einen Prompt vom Aufgaben-Typ "Klassifizierung" handeln muss. Wird keine Prompt-ID angegeben, wird der von NEO vorgegebene Prompt verwendet.|
-| original_path | String | Nein | Optionaler Pfad, der mit dem Dokument gespeichert werden soll (z.B. der ursprüngliche Dateipfad) |
+| Parameter      | Type        | Required | Description                                                                                                   |
+|----------------|-------------|----------|---------------------------------------------------------------------------------------------------------------|
+| file           | File(s)     | Yes      | One or more files to be uploaded. Supported formats are PDF, DOCX, JPG, PNG, etc.                             |
+| entity_id      | String      | Yes      | The ID of the entity to which the document should be linked (e.g., customer ID, project ID)                   |
+| classify       | Boolean     | No       | Indicates whether the documents should be classified automatically. Default is `true`                         |
+| prompt_id      | Boolean     | No       | The ID of the prompt used for classification (found in the Settings menu under Prompts). Note: this must be a prompt ID, not a name |
+| original_path  | String      | No       | Optional path to be stored with the document (e.g., original file path)                                       |
 
-## Beispiel
+## Example
 
-### cURL Beispiel
+### cURL Example
 
 ```bash
-curl -X POST "https://ihre-api-domain.de/document-management/documents" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
-  -F "file=@/pfad/zu/ihrer/datei.pdf" \
-  -F "entity_id=KUNDE123" \
+curl -X POST "https://your-api-domain.com/document-management/documents" \
+  -H "X-API-KEY: <YOUR_API_KEY>" \
+  -F "file=@/path/to/your/file.pdf" \
+  -F "entity_id=CUSTOMER123" \
   -F "classify=true"
 ```
 
-### Beispiel mit mehreren Dateien
+### Example with Multiple Files
 
 ```bash
-curl -X POST "https://ihre-api-domain.de/document-management/documents" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
-  -F "file=@/pfad/zu/ihrer/datei1.pdf" \
-  -F "file=@/pfad/zu/ihrer/datei2.pdf" \
-  -F "entity_id=PROJEKT456" \
+curl -X POST "https://your-api-domain.com/document-management/documents" \
+  -H "X-API-KEY: <YOUR_API_KEY>" \
+  -F "file=@/path/to/your/file1.pdf" \
+  -F "file=@/path/to/your/file2.pdf" \
+  -F "entity_id=PROJECT456" \
   -F "classify=true" \
-  -F "original_path=/originaler/dateipfad/"
+  -F "original_path=/original/file/path/"
 ```
 
-### Python Beispiel
+### Python Example
 
 ```python
 import requests
@@ -61,60 +60,60 @@ from pathlib import Path
 
 def upload_documents(api_url, api_key, files_path, entity_id, classify=True, original_path=None):
     """
-    Lädt ein oder mehrere Dokumente über die API hoch.
-    
+    Uploads one or more documents via the API.
+
     Args:
-        api_url (str): Basis-URL der API (z.B. "https://api.example.com/api")
-        api_key (str): API-Schlüssel für die Authentifizierung
-        files_path (str or list): Pfad zu einer Datei oder Liste von Dateipfaden
-        entity_id (str): ID der Entität, mit der die Dokumente verknüpft werden sollen
-        classify (bool): Ob die Dokumente klassifiziert werden sollen
-        original_path (str, optional): Originalpfad der Dokumente
-        
+        api_url (str): Base URL of the API (e.g., "https://api.example.com/api")
+        api_key (str): API key for authentication
+        files_path (str or list): Path to a file or list of file paths
+        entity_id (str): ID of the entity to which the documents should be linked
+        classify (bool): Whether the documents should be classified
+        original_path (str, optional): Original path of the documents
+
     Returns:
-        dict: Die API-Antwort als Dictionary
+        dict: The API response as a dictionary
     """
-    # Endpoint-URL
+    # Endpoint URL
     url = f"{api_url}/document-management/documents"
-    
-    # Headers mit API-Key für die Authentifizierung
+
+    # Headers with API key for authentication
     headers = {
         "X-API-KEY": api_key,
     }
-    
-    # Formular-Daten
+
+    # Form data
     form_data = {
         "entity_id": entity_id,
         "classify": str(classify).lower(),
     }
-    
+
     if original_path:
         form_data["original_path"] = original_path
-    
-    # Dateien für den Upload vorbereiten
+
+    # Prepare files for upload
     if isinstance(files_path, str):
-        files_path = [files_path]  # Einzelnen Pfad in Liste umwandeln
-    
+        files_path = [files_path]
+
     files = []
     for file_path in files_path:
         file_name = Path(file_path).name
         files.append(
             ('file', (file_name, open(file_path, 'rb'), 'application/pdf'))
         )
-    
-    # POST-Anfrage senden
+
+    # Send POST request
     response = requests.post(
         url=url,
         headers=headers,
         data=form_data,
         files=files
     )
-    
-    # Dateien schließen
+
+    # Close files
     for _, (_, file_obj, _) in files:
         file_obj.close()
-    
-    # Antwort verarbeiten
+
+    # Process response
     try:
         result = response.json()
         print(f"Status: {response.status_code}")
@@ -126,30 +125,30 @@ def upload_documents(api_url, api_key, files_path, entity_id, classify=True, ori
         return {"error": "Invalid JSON response"}
 
 if __name__ == "__main__":
-    # Konfiguration
-    API_URL = "https://your-api-domain.com"  # Passen Sie dies an Ihre API-URL an
-    API_KEY = "your-api-key"                     # Ersetzen Sie dies durch Ihren API-Schlüssel
-    
-    # Beispiel für einen einzelnen Datei-Upload
-    document_path = "./example_document.pdf"     # Pfad zu Ihrem Beispieldokument
-    entity_id = "<unique id>"                   # Beispiel-Entitäts-ID
-    
-    print("Beispiel 1: Einzelnes Dokument hochladen")
+    # Configuration
+    API_URL = "https://your-api-domain.com"     # Adjust to your API URL
+    API_KEY = "your-api-key"                    # Replace with your API key
+
+    # Example for single file upload
+    document_path = "./example_document.pdf"    # Path to your sample document
+    entity_id = "<unique id>"                   # Example entity ID
+
+    print("Example 1: Upload a single document")
     upload_documents(
         api_url=API_URL,
         api_key=API_KEY,
         files_path=document_path,
         entity_id=entity_id
     )
-    
-    # Beispiel für mehrere Dateien
-    print("\nBeispiel 2: Mehrere Dokumente hochladen")
+
+    # Example for multiple files
+    print("\nExample 2: Upload multiple documents")
     multiple_docs = [
         "./document1.pdf",
         "./document2.pdf",
         "./invoice.pdf"
     ]
-    
+
     upload_documents(
         api_url=API_URL,
         api_key=API_KEY,
@@ -158,8 +157,8 @@ if __name__ == "__main__":
         classify=True,
         original_path="/customer/project-456/documents"
     )
-    
-    print("\nBeispiel 3: Dokument ohne Klassifizierung hochladen")
+
+    print("\nExample 3: Upload document without classification")
     upload_documents(
         api_url=API_URL,
         api_key=API_KEY,
@@ -169,7 +168,7 @@ if __name__ == "__main__":
     )
 ```
 
-### Javascript Beispiel
+### Javascript Example
 
 ```javascript
 async function uploadDocuments(apiUrl, apiKey, filesPath, entityId, classify = true, originalPath = null) {
@@ -220,12 +219,12 @@ async function uploadDocuments(apiUrl, apiKey, filesPath, entityId, classify = t
       return { error: "Invalid JSON response" };
     }
   } catch (error) {
-    console.error("Fehler beim Hochladen:", error);
+    console.error("Upload error:", error);
     return { error: error.message };
   }
 }
 
-// Hilfsfunktion zum Lesen von Dateien als Blob (nur in Node.js)
+// Helper function to read files as Blob (Node.js only)
 const fs = require("fs");
 const path = require("path");
 
@@ -239,29 +238,28 @@ function readFileAsBlob(filePath) {
   });
 }
 
-// Beispiel-Aufrufe
+// Example calls
 const API_URL = "https://your-api-domain.com";
 const API_KEY = "your-api-key";
 const ENTITY_ID = "<unique id>";
 
-// Beispiel 1: Einzelnes Dokument
+// Example 1: Single document
 uploadDocuments(API_URL, API_KEY, "./example_document.pdf", ENTITY_ID);
 
-// Beispiel 2: Mehrere Dokumente
+// Example 2: Multiple documents
 uploadDocuments(API_URL, API_KEY, [
   "./document1.pdf",
   "./document2.pdf",
   "./invoice.pdf"
 ], "<unique id>", true, "/customer/project-456/documents");
 
-// Beispiel 3: Ohne Klassifizierung
+// Example 3: Without classification
 uploadDocuments(API_URL, API_KEY, "./contract.pdf", "<unique id>", false);
-
 ```
 
-## Antwort
+## Response
 
-### Erfolgreiche Antwort (200 OK)
+### Successful Response (200 OK)
 
 ```json
 {
@@ -270,52 +268,51 @@ uploadDocuments(API_URL, API_KEY, "./contract.pdf", "<unique id>", false);
 }
 ```
 
-Da Dokumente von NEO "entpackt" werden, bspw. Anhänge aus E-Mails, dient die `correlation_id` dazu eine Klammer um diese Dokumente zu bilden. Sie kann verwendet werden, um den Status des hochgeladenen und der daraus entpackten Dokumente über den ```/document-management/documents/batch``` Endpoint abzufragen. 
+Because documents are "unpacked" by NEO (e.g., attachments from emails), the `correlation_id` serves as a grouping for these documents. It can be used to track the status of the uploaded documents.
 
-### Fehlerantworten
+### Error Responses
 
-- **400 Bad Request**: Fehlerhafte Anfrage, z.B. wenn keine Dateien hochgeladen wurden
+- **400 Bad Request**: Invalid request, e.g., if no files were uploaded
   ```json
   {
     "error": "No files uploaded"
   }
   ```
 
-- **403 Forbidden**: Kein gültiger Tenant bereitgestellt
+- **403 Forbidden**: No valid tenant provided
   ```json
   {
     "error": "No valid tenant provided"
   }
   ```
 
-- **500 Internal Server Error**: Interner Serverfehler bei der Verarbeitung
+- **500 Internal Server Error**: Internal server error during processing
 
-## Webhook-Benachrichtigungen
+## Webhook Notifications
 
-Um Benachrichtigungen über den Abschluss der Dokumentenverarbeitung zu erhalten:
+To receive notifications about the completion of document processing:
 
-1. Registrieren Sie eine Webhook-URL über den `/webhooks`-Endpunkt
-2. Ihr registrierter Webhook wird benachrichtigt, wenn die Verarbeitung abgeschlossen ist
+1. Register a webhook URL via the `/webhooks` endpoint
+2. Your registered webhook will be notified when processing is complete
 
-## Asynchrone Verarbeitung
+## Asynchronous Processing
 
-Bitte beachten Sie, dass die Dokumentenverarbeitung asynchron erfolgt:
+Please note that document processing occurs asynchronously:
 
-1. Der Upload-Endpunkt gibt sofort eine Antwort mit einer `correlation_id` zurück
-2. Die eigentliche Verarbeitung (OCR, Klassifizierung) erfolgt im Hintergrund
-3. Der Status und die Ergebnisse können später über andere API-Endpunkte abgefragt werden
+1. The upload endpoint immediately returns a response with a `correlation_id`
+2. Actual processing (OCR, classification) happens in the background
+3. Status and results can be queried later via other API endpoints
 
-## Verarbeitungsschritte
+## Processing Steps
 
-Die hochgeladenen Dokumente durchlaufen folgende Verarbeitungsschritte:
+Uploaded documents go through the following processing steps:
 
-1. **Upload**: Speicherung der Originaldatei
-2. **Extraktion**: Umwandlung in Text mittels OCR (Optical Character Recognition)
-3. **Klassifizierung** (optional): Automatische Bestimmung des Dokumententyps
-4. **Anreicherung**: Extraktion spezifischer Informationen basierend auf dem Dokumententyp
+1. **Upload**: Storage of the original file
+2. **Extraction**: Conversion to text via OCR (Optical Character Recognition)
+3. **Classification** (optional): Automatic determination of document type
+4. **Enrichment**: Extraction of specific information based on document type
 
-## Hinweise
+## Notes
 
-- Für die Batch-Verarbeitung großer Mengen an Dokumenten empfehlen wir, mehrere kleinere Anfragen zu senden
-- Der Parameter `classify=false` kann verwendet werden, um die automatische Klassifizierung zu überspringen, was die Verarbeitung beschleunigt
-```
+- For batch processing of large numbers of documents, we recommend sending several smaller requests
+- The parameter `classify=false` can be used to skip automatic classification, which speeds up processing
