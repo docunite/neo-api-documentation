@@ -1,6 +1,6 @@
-# Dokument-Status
+# Document Status
 
-Ein Dokument hat während der Verarbeitungsschritte verschiedene Status. Diese sind als Enum implementiert und stellen sich wie folgt dar:
+A document goes through various statuses during the processing steps. These statuses are implemented as an enum and are as follows:
 
     UNSUPPORTED = -2
     ERROR = -1
@@ -11,3 +11,6 @@ Ein Dokument hat während der Verarbeitungsschritte verschiedene Status. Diese s
     CLASSIFIED = 4
     ENRICHING = 5
     ENRICHED = 6
+    UNRECOGNIZED = 9
+    SPLITTING = 10
+    SPLITTED = 11
