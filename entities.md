@@ -1,192 +1,192 @@
-# Entity-Management API Dokumentation
+# Entity Management API Documentation
 
-## Übersicht
+## Overview
 
-Diese API ermöglicht die Verwaltung von Entitäten (Spaces) in NEO. Entitäten fungieren als Container oder Organisationseinheiten für Dokumente und müssen vor dem Hochladen von Dokumenten erstellt werden.
+This API enables the management of entities (Spaces) in NEO. Entities serve as containers or organizational units for documents and must be created before uploading documents.
 
-> **Wichtig:** Bevor Sie Dokumente hochladen können, muss mindestens eine Entität (Space) erstellt werden. Die Dokument-Upload-API erfordert eine gültige `entity_id` als Pflichtparameter.
+> **Important:** Before you can upload documents, at least one entity (Space) must be created. The document upload API requires a valid `entity_id` as a mandatory parameter.
 
-## Authentifizierung
+## Authentication
 
-Für alle Anfragen ist ein gültiger API-Schlüssel erforderlich, der im Header übermittelt werden muss.
+A valid API key is required for all requests, which must be provided in the header.
 
-## Endpunkte
+## Endpoints
 
-### Alle Entitäten abrufen
+### Retrieve All Entities
 
-Ruft alle Entitäten für den aktuellen Mandanten (Tenant) ab.
+Retrieves all entities for the current tenant.
 
 ```
 GET /entity-management/entities
 ```
 
-#### Anfrage
+#### Request
 
-Keine zusätzlichen Parameter erforderlich. Die Tenant-ID wird automatisch aus dem Authentifizierungskontext ermittelt.
+No additional parameters required. The tenant ID is automatically determined from the authentication context.
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X GET "https://ihre-api-domain.de/entity-management/entities" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
+curl -X GET "https://your-api-domain.com/entity-management/entities" \
+  -H "X-API-KEY: <YOUR_API_KEY>"
 ```
 
-#### Erfolgreiche Antwort (200 OK)
+#### Successful Response (200 OK)
 
 ```json
 [
   {
     "id": "123e4567-e89b-12d3-a456-426614174000",
-    "name": "Kundenverträge",
-    "description": "Verträge mit allen Kunden",
+    "name": "Customer Contracts",
+    "description": "Contracts with all customers",
     "created_at": "2024-03-19T10:30:00Z"
   },
   {
     "id": "456e7890-e21d-34f5-a678-426614174001",
-    "name": "Rechnungen",
-    "description": "Eingehende Lieferantenrechnungen",
+    "name": "Invoices",
+    "description": "Incoming supplier invoices",
     "created_at": "2024-03-20T09:15:00Z"
   }
 ]
 ```
 
-### Neue Entität erstellen
+### Create New Entity
 
-Erstellt eine neue Entität für den aktuellen Mandanten.
+Creates a new entity for the current tenant.
 
 ```
 POST /entity-management/entities
 ```
 
-#### Anfrage
+#### Request
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| name | String | Ja | Der Name der zu erstellenden Entität (max. Länge: 255) |
-| description | String | Nein | Eine Beschreibung der Entität |
+| Parameter   | Type   | Required | Description                                   |
+|-------------|--------|----------|-----------------------------------------------|
+| name        | String | Yes      | Name of the entity to be created (max. 255)   |
+| description | String | No       | A description of the entity                   |
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X POST "https://ihre-api-domain.de/entity-management/entities" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
+curl -X POST "https://your-api-domain.com/entity-management/entities" \
+  -H "X-API-KEY: <YOUR_API_KEY>" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Neue Entität",
-    "description": "Beschreibung der neuen Entität"
+    "name": "New Entity",
+    "description": "Description of the new entity"
   }'
 ```
 
-#### Erfolgreiche Antwort (201 Created)
+#### Successful Response (201 Created)
 
 ```json
 {
   "id": "789e0123-f45g-67h8-b901-426614174002",
-  "name": "Neue Entität",
-  "description": "Beschreibung der neuen Entität",
+  "name": "New Entity",
+  "description": "Description of the new entity",
   "created_at": "2024-03-25T14:45:00Z"
 }
 ```
 
-### Spezifische Entität abrufen
+### Retrieve Specific Entity
 
-Ruft eine spezifische Entität anhand ihrer ID ab.
+Retrieves a specific entity by its ID.
 
 ```
 GET /entity-management/entities/{entity_id}
 ```
 
-#### Parameter
+#### Parameters
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| entity_id | String | Ja | Die eindeutige ID der abzurufenden Entität |
+| Parameter | Type   | Required | Description                              |
+|-----------|--------|----------|------------------------------------------|
+| entity_id | String | Yes      | The unique ID of the entity to retrieve  |
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X GET "https://ihre-api-domain.de/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
+curl -X GET "https://your-api-domain.com/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
+  -H "X-API-KEY: <YOUR_API_KEY>"
 ```
 
-#### Erfolgreiche Antwort (200 OK)
+#### Successful Response (200 OK)
 
 ```json
 {
   "id": "123e4567-e89b-12d3-a456-426614174000",
-  "name": "Kundenverträge",
-  "description": "Verträge mit allen Kunden",
+  "name": "Customer Contracts",
+  "description": "Contracts with all customers",
   "created_at": "2024-03-19T10:30:00Z"
 }
 ```
 
-### Entität aktualisieren
+### Update Entity
 
-Aktualisiert eine bestehende Entität.
+Updates an existing entity.
 
 ```
 PUT /entity-management/entities/{entity_id}
 ```
 
-#### Parameter URL
+#### URL Parameters
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| entity_id | String | Ja | Die eindeutige ID der zu aktualisierenden Entität |
+| Parameter | Type   | Required | Description                               |
+|-----------|--------|----------|-------------------------------------------|
+| entity_id | String | Yes      | The unique ID of the entity to update     |
 
-#### Parameter Body
+#### Body Parameters
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| name | String | Ja | Der neue Name der Entität |
-| description | String | Nein | Eine neue Beschreibung der Entität |
+| Parameter   | Type   | Required | Description                             |
+|-------------|--------|----------|-----------------------------------------|
+| name        | String | Yes      | The new name of the entity              |
+| description | String | No       | A new description of the entity         |
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X PUT "https://ihre-api-domain.de/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
+curl -X PUT "https://your-api-domain.com/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
+  -H "X-API-KEY: <YOUR_API_KEY>" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Aktualisierter Entitätsname",
-    "description": "Aktualisierte Entitätsbeschreibung"
+    "name": "Updated Entity Name",
+    "description": "Updated entity description"
   }'
 ```
 
-#### Erfolgreiche Antwort (200 OK)
+#### Successful Response (200 OK)
 
 ```json
 {
   "id": "123e4567-e89b-12d3-a456-426614174000",
-  "name": "Aktualisierter Entitätsname",
-  "description": "Aktualisierte Entitätsbeschreibung",
+  "name": "Updated Entity Name",
+  "description": "Updated entity description",
   "created_at": "2024-03-19T10:30:00Z",
   "updated_at": "2024-03-26T08:20:00Z"
 }
 ```
 
-### Entität löschen
+### Delete Entity
 
-Löscht eine Entität und alle zugehörigen Daten (einschließlich Dokumente).
+Deletes an entity and all associated data (including documents).
 
 ```
 DELETE /entity-management/entities/{entity_id}
 ```
 
-#### Parameter
+#### Parameters
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| entity_id | String | Ja | Die eindeutige ID der zu löschenden Entität |
+| Parameter | Type   | Required | Description                              |
+|-----------|--------|----------|------------------------------------------|
+| entity_id | String | Yes      | The unique ID of the entity to delete    |
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X DELETE "https://ihre-api-domain.de/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
+curl -X DELETE "https://your-api-domain.com/entity-management/entities/123e4567-e89b-12d3-a456-426614174000" \
+  -H "X-API-KEY: <YOUR_API_KEY>"
 ```
 
-#### Erfolgreiche Antwort (200 OK)
+#### Successful Response (200 OK)
 
 ```json
 {
@@ -195,72 +195,74 @@ curl -X DELETE "https://ihre-api-domain.de/entity-management/entities/123e4567-e
 }
 ```
 
-## Zusammenhang mit Dokumenten-Upload
+## Relationship with Document Upload
 
-Bevor Sie Dokumente über die Dokument-Upload-API hochladen können, müssen Sie mindestens eine Entität erstellen. Die Entitäts-ID (`entity_id`) wird bei jedem Dokument-Upload als Pflichtparameter benötigt, um die Zuordnung zwischen Dokumenten und Entitäten herzustellen.
+Before uploading documents via the document upload API, you must create at least one entity. The entity ID (`entity_id`) is a required parameter for every document upload.
 
-### Workflow-Beispiel:
+### Workflow Example:
 
-1. **Entität erstellen**:
+1. **Create Entity**:
    ```bash
-   curl -X POST "https://ihre-api-domain.de/entity-management/entities" \
-     -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
+   curl -X POST "https://your-api-domain.com/entity-management/entities" \
+     -H "X-API-KEY: <YOUR_API_KEY>" \
      -H "Content-Type: application/json" \
      -d '{
-       "name": "Projektzusammenarbeit XYZ",
-       "description": "Dokumente für Projekt XYZ"
+       "name": "Project Collaboration XYZ",
+       "description": "Documents for Project XYZ"
      }'
    ```
 
-2. **Die erhaltene Entitäts-ID für den Dokument-Upload verwenden**:
+2. **Use the received entity ID for document upload**:
    ```bash
-   curl -X POST "https://ihre-api-domain.de/document-management/documents" \
-     -H "X-API-KEY: <IHR_API_SCHLÜSSEL>" \
-     -F "file=@/pfad/zu/dokument.pdf" \
+   curl -X POST "https://your-api-domain.com/document-management/documents" \
+     -H "X-API-KEY: <YOUR_API_KEY>" \
+     -F "file=@/path/to/document.pdf" \
      -F "entity_id=123e4567-e89b-12d3-a456-426614174000" \
      -F "classify=true"
    ```
 
-## Fehlerantworten
+## Error Responses
 
-- **400 Bad Request**: Fehlerhafte Anfrage (z.B. ungültige Parameter)
+- **400 Bad Request**: Invalid request (e.g., invalid parameters)
   ```json
   {
     "error": "Invalid input data"
   }
   ```
 
-- **401 Unauthorized**: Ungültiger oder fehlender API-Schlüssel
+- **401 Unauthorized**: Invalid or missing API key
   ```json
   {
     "error": "Unauthorized - Invalid or missing API key"
   }
   ```
 
-- **403 Forbidden**: API-Schlüssel hat keine ausreichenden Berechtigungen
+- **403 Forbidden**: API key does not have sufficient permissions
   ```json
   {
     "error": "Forbidden - API key does not have sufficient permissions"
   }
   ```
 
-- **404 Not Found**: Entität nicht gefunden
+- **404 Not Found**: Entity not found
   ```json
   {
     "error": "Entity not found"
   }
   ```
 
-- **500 Internal Server Error**: Interner Serverfehler bei der Verarbeitung
+- **500 Internal Server Error**: Internal server error during processing
 
-## Entitäts-Verwaltung Best Practices
+## Entity Management Best Practices
 
-1. **Sinnvolle Organisationsstruktur**: Erstellen Sie Entitäten, die Ihrer Organisationsstruktur oder Ihren Geschäftsprozessen entsprechen (z.B. Abteilungen, Projekte, Kundengruppen)
+1. **Meaningful Organizational Structure**: Create entities that reflect your organizational structure or business processes (e.g., departments, projects, customer groups)
 
-2. **Konsistente Benennung**: Verwenden Sie ein konsistentes Benennungsschema für Entitäten, um die Navigation zu erleichtern
+2. **Consistent Naming**: Use a consistent naming scheme for entities to facilitate navigation
 
-3. **Beschreibende Informationen**: Nutzen Sie das Beschreibungsfeld, um zusätzliche Kontextinformationen zur Entität zu bieten
+3. **Descriptive Information**: Use the description field to provide additional context information about the entity
 
-4. **Regelmäßige Bereinigung**: Löschen Sie nicht mehr benötigte Entitäten, um Ihre Umgebung übersichtlich zu halten (beachten Sie, dass dabei auch alle zugehörigen Dokumente gelöscht werden)
+4. **Regular Cleanup**: Delete entities that are no longer needed to keep your environment organized (note that this will also delete all associated documents)
 
-5. **Entitäts-Hierarchie**: Planen Sie Ihre Entitätsstruktur sorgfältig, da das System derzeit keine direkten Hierarchien oder Unterordner innerhalb von Entitäten unterstützt
+5. **Entity Hierarchy**: Plan your entity structure carefully, as the system currently does not support direct hierarchies or subfolders within entities
+
+```
