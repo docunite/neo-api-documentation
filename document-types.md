@@ -1,35 +1,35 @@
-# Dokumententyp-API Dokumentation
+# Document Type API Documentation
 
-## Übersicht
+## Overview
 
-Diese API ermöglicht den Zugriff auf Dokumententypen in NEO. Dokumententypen definieren die verschiedenen Arten von Dokumenten, die im System verarbeitet werden können, und steuern die spezifische Verarbeitung und Kategorisierung von Dokumenten.
+This API enables access to document types in NEO. Document types define the various kinds of documents that can be processed in the system and control the specific processing logic for each type.
 
-## Authentifizierung
+## Authentication
 
-Für alle Anfragen ist ein gültiger API-Schlüssel erforderlich, der im Header übermittelt werden muss.
+A valid API key is required for all requests, which must be submitted in the header.
 
-## Endpunkte
+## Endpoints
 
-### Alle Dokumententypen abrufen
+### Retrieve All Document Types
 
-Ruft alle verfügbaren Dokumententypen für den aktuellen Mandanten (Tenant) ab.
+Retrieves all available document types for the current tenant.
 
 ```
 GET /document-type-management/document-types
 ```
 
-#### Anfrage
+#### Request
 
-Keine zusätzlichen Parameter erforderlich. Die Tenant-ID wird automatisch aus dem Authentifizierungskontext ermittelt.
+No additional parameters required. The tenant ID is automatically determined from the authentication context.
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X GET "https://ihre-api-domain.de/document-type-management/document-types" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
+curl -X GET "https://your-api-domain.com/document-type-management/document-types" \
+  -H "X-API-KEY: <YOUR_API_KEY>"
 ```
 
-#### Erfolgreiche Antwort (200 OK)
+#### Successful Response (200 OK)
 
 ```json
 [
@@ -38,104 +38,105 @@ curl -X GET "https://ihre-api-domain.de/document-type-management/document-types"
     "name_de": "Rechnung",
     "name_en": "Invoice",
     "description": "",
-    "synonym_of": ""
-    "has_enrichment_prompt": false
+    "synonym_of": "",
+    "has_enrichment_prompt": false,
     "created": "2023-04-15T14:30:00Z",
     "modified": "2023-04-15T14:30:00Z"
   },
   {
     "id": "2b3c4d5e-6f7g-8h9i-0j1k-2l3m4n5o6p7q",
     "name_de": "Mietvertrag",
-    "name_de": "Contract",
+    "name_en": "Contract",
     "description": "",
-    "synonym_of": "060cb344-fa93-4d4c-a194-3f9ea11d034e"
-    "has_enrichment_prompt": true
+    "synonym_of": "060cb344-fa93-4d4c-a194-3f9ea11d034e",
+    "has_enrichment_prompt": true,
     "created": "2023-04-10T09:15:00Z",
     "modified": "2023-04-12T11:20:00Z"
   }
 ]
 ```
 
-### Spezifischen Dokumententyp abrufen
+### Retrieve a Specific Document Type
 
-Ruft einen einzelnen Dokumententyp anhand seiner ID ab.
+Retrieves a single document type by its ID.
 
 ```
 GET /document-type-management/document-types/{document_type_id}
 ```
 
-#### Parameter
+#### Parameters
 
-| Parameter | Typ | Erforderlich | Beschreibung |
-|-----------|-----|--------------|--------------|
-| document_type_id | String | Ja | Die eindeutige ID des abzurufenden Dokumententyps |
+| Parameter         | Type   | Required | Description                                  |
+|-------------------|--------|----------|----------------------------------------------|
+| document_type_id  | String | Yes      | The unique ID of the document type to fetch  |
 
-#### Beispiel
+#### Example
 
 ```bash
-curl -X GET "https://ihre-api-domain.de/document-type-management/document-types/1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p" \
-  -H "X-API-KEY: <IHR_API_SCHLÜSSEL>"
+curl -X GET "https://your-api-domain.com/document-type-management/document-types/1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p" \
+  -H "X-API-KEY: <YOUR_API_KEY>"
 ```
 
-#### Erfolgreiche Antwort (200 OK)
+#### Successful Response (200 OK)
 
 ```json
 {
   "id": "1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
-  "name": "Rechnung",
-  "description": "Eingangsrechnungen von Lieferanten",
-  "synonym_of": "060cb344-fa93-4d4c-a194-3f9ea11d034e"
+  "name": "Invoice",
+  "description": "Incoming invoices from suppliers",
+  "synonym_of": "060cb344-fa93-4d4c-a194-3f9ea11d034e",
   "created": "2023-04-15T14:30:00Z",
   "modified": "2023-04-15T14:30:00Z"
 }
 ```
 
-## Fehlerantworten
+## Error Responses
 
-- **403 Forbidden**: Kein gültiger Tenant bereitgestellt
+- **403 Forbidden**: No valid tenant provided
   ```json
   {
     "error": "No valid tenant provided"
   }
   ```
 
-- **404 Not Found**: Dokumententyp nicht gefunden (nur bei Abfrage eines spezifischen Dokumententyps)
+- **404 Not Found**: Document type not found (only when querying a specific document type)
   ```json
   {
     "error": "Document type 1a2b3c4d-5e6f-7g8h-9i0j-1k2l3m4n5o6p not found"
   }
   ```
 
-- **500 Internal Server Error**: Interner Serverfehler bei der Verarbeitung
+- **500 Internal Server Error**: Internal server error during processing
 
-# Dokumenttyp-Hierarchie
+# Document Type Hierarchy
 
-In NEO können Dokumenttypen hierarchisch organisiert werden, wobei ein Dokumenttyp ein Synonym (oder Untertyp) eines anderen sein kann. Diese Beziehung wird über das Attribut `synonym_of` abgebildet. Dieser Leitfaden erklärt, wie Entwickler den vollständigen hierarchischen Pfad eines Dokumenttyps ermitteln können.
+In NEO, document types can be organized hierarchically, where a document type can be a synonym (or subtype) of another. This relationship is represented using the `synonym_of` attribute.
 
-## Das Attribut `synonym_of`
+## The `synonym_of` Attribute
 
-Das Feld `synonym_of` in einem Dokumenttyp enthält die ID des übergeordneten Dokumenttyps. Wenn `synonym_of` null oder leer ist, handelt es sich um einen Dokumenttyp der obersten Ebene. Diese Struktur ermöglicht eine Baumdarstellung von Dokumenttypen.
+The `synonym_of` field in a document type contains the ID of the parent document type. If `synonym_of` is null or empty, it is a top-level document type. This structure enables the representation of com[...]
 
-Beispiel für eine Hierarchie:
-- Vertrag (oberste Ebene, `synonym_of` = null)
-  - Arbeitsvertrag (`synonym_of` = ID von "Vertrag")
-    - Befristeter Arbeitsvertrag (`synonym_of` = ID von "Arbeitsvertrag")
-  - Kaufvertrag (`synonym_of` = ID von "Vertrag")
-  - Mietvertrag (`synonym_of` = ID von "Vertrag")
+Example of a hierarchy:
+- Contract (top level, `synonym_of` = null)
+  - Employment Contract (`synonym_of` = ID of "Contract")
+    - Fixed-Term Employment Contract (`synonym_of` = ID of "Employment Contract")
+  - Purchase Agreement (`synonym_of` = ID of "Contract")
+  - Rental Agreement (`synonym_of` = ID of "Contract")
 
-## Verwendung von Dokumententypen
+## Usage of Document Types
 
-Dokumententypen werden in verschiedenen Szenarien verwendet:
+Document types are used in various scenarios:
 
-1. **Dokumentenklassifizierung**: Beim Hochladen und Verarbeiten von Dokumenten wird der passende Dokumententyp automatisch erkannt oder kann manuell zugewiesen werden.
+1. **Document Classification**: When uploading and processing documents, the appropriate document type is automatically recognized or can be assigned manually.
 
-2. **Dokumentenverarbeitung**: Basierend auf dem Dokumententyp werden spezifische Verarbeitungsschritte durchgeführt, wie die Extraktion bestimmter Datenfelder.
+2. **Document Processing**: Based on the document type, specific processing steps are performed, such as the extraction of certain data fields.
 
-3. **Dokumentensuche**: Dokumente können nach ihrem Typ gefiltert werden, um die Suche zu erleichtern.
+3. **Document Search**: Documents can be filtered by their type to facilitate searching.
 
-4. **Berichterstellung**: Statistiken und Berichte können nach Dokumententypen gruppiert werden.
+4. **Reporting**: Statistics and reports can be grouped by document types.
 
-## Hinweise
-- Die Dokumententypen sind mandantenspezifisch (tenant-specific)
-- Die Abfrageergebnisse enthalten nur Dokumententypen, auf die der aktuelle Mandant Zugriff hat. Standardisierte Dokumenttypen werden out-of-the-box mitgeliefert. Die individuellen Dokumenttypen lassen sich über das Attribut "origin": "individual" ermitteln.
-- Die IDs der Dokumententypen werden bei der Dokumentenklassifizierung und -aktualisierung verwendet
+## Notes
+
+- Document types are tenant-specific
+- Query results only include document types accessible to the current tenant. Standardized document types are provided out-of-the-box. Individual document types can be added per tenant as needed.
+- The IDs of document types are used for document classification and update operations.
