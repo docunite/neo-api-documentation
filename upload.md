@@ -18,13 +18,18 @@ All requests require a valid API key, which must be provided in the header.
 
 The endpoint expects a `multipart/form-data` request with the following parameters:
 
-| Parameter      | Type        | Required | Description                                                                                                   |
-|----------------|-------------|----------|---------------------------------------------------------------------------------------------------------------|
-| file           | File(s)     | Yes      | One or more files to be uploaded. Supported formats are PDF, DOCX, JPG, PNG, etc.                             |
-| entity_id      | String      | Yes      | The ID of the entity to which the document should be linked (e.g., customer ID, project ID)                   |
-| classify       | Boolean     | No       | Indicates whether the documents should be classified automatically. Default is `true`                         |
-| prompt_id      | Boolean     | No       | The ID of the prompt used for classification (found in the Settings menu under Prompts). Note: this must be a prompt ID, not a name |
-| original_path  | String      | No       | Optional path to be stored with the document (e.g., original file path)                                       |
+| Parameter           | Type        | Required | Description                                                                                                   |
+|---------------------|-------------|----------|---------------------------------------------------------------------------------------------------------------|
+| file                | File(s)     | Yes      | One or more files to be uploaded. Supported formats are PDF, DOCX, JPG, PNG, etc.                             |
+| entity_id           | String (UUID)| Yes     | The ID of the entity to which the document should be linked                                                   |
+| classify            | Boolean     | No       | Indicates whether the documents should be classified automatically. Default is `true`                         |
+| prompt_id           | String (UUID)| No      | The ID of the prompt used for classification (found in the Settings menu under Prompts). Note: this must be a prompt ID, not a name |
+| pipeline_id         | String (UUID)| No      | The ID of a pipeline to execute automatically after upload. See [Pipelines](pipelines.md) for details         |
+| pipeline_parameters | String (JSON)| No      | JSON object with pipeline parameter values (e.g., `{"key": "value"}`). Only used when `pipeline_id` is provided |
+| split_documents     | Boolean     | No       | Indicates whether documents should be split. Default is `false`                                               |
+| correlation_id      | String (UUID)| No      | Pre-generated correlation ID for tracking. If not provided, one will be generated automatically               |
+| original_path       | String      | No       | Optional path to be stored with the document (e.g., original file path)                                       |
+| duplicate_handling  | String      | No       | How to handle duplicate documents: `warn` (default), `reject`, or `allow`                                     |
 
 ## Example
 

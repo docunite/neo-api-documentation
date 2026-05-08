@@ -12,6 +12,7 @@ With this API you can:
 - Perform text extraction, classification, and enrichment of documents
 - Query and analyze document content
 - Create and manage your own prompts and schemas for classification and enrichment
+- Execute pipelines on documents and track their progress
 
 ## Table of Contents
 
@@ -71,6 +72,10 @@ Endpoints for querying document types.
 ### [Schemas](schemas.md)
 
 Endpoints for managing schemas.
+
+### [Pipelines](pipelines.md)
+
+Endpoints for executing pipelines on documents and tracking execution status.
 
 ### [Prompts](prompts.md)
 
