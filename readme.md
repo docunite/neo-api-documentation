@@ -38,7 +38,7 @@ A typical workflow for using the API involves the following steps:
 
 1. **Create an Entity**: First, create an entity (Space) to serve as a container for your documents.
 2. **Upload Documents**: Upload documents and assign them to the created entity.
-3. **Monitor Processing Status**: Monitor the processing status of uploaded documents.
+3. **Monitor Processing Status**: Monitor the [processing status](document-status.md) of uploaded documents.
 4. **Query Document Content**: Query metadata, extracted text, or classified information.
 
 ## Authentication
@@ -64,6 +64,10 @@ Endpoints for managing entities (Spaces), which serve as containers for document
 ### [Document Management](upload.md)
 
 Endpoints for uploading, processing, and querying documents.
+
+### [Document Status](document-status.md)
+
+Endpoint for polling the processing status of a document (`queued`, `running`, `completed`, `error`, `cancelled`).
 
 ### [Document Types](document-types.md)
 

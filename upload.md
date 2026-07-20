@@ -306,7 +306,9 @@ Please note that document processing occurs asynchronously:
 
 1. The upload endpoint immediately returns a response with a `correlation_id`
 2. Actual processing (OCR, classification) happens in the background
-3. Status and results can be queried later via other API endpoints
+3. Status and results can be queried later via other API endpoints. Use the
+   [Document Status](document-status.md) endpoint to poll a document's processing status
+   (`queued`, `running`, `completed`, `error`, `cancelled`).
 
 ## Processing Steps
 
